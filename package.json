@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "seed": "node -e \"console.log('Seed data is embedded in db.js');\""
+    "seed": "node -e \"console.log('Seed data is embedded in db.js');\"",
+    "extract:taluks": "node scripts/extract-taluks.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
