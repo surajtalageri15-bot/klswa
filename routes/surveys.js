@@ -12,7 +12,7 @@ function scopeSurveys(user) {
   if (role === 'surveyor')
     return s => s.surveyor_id === user.id;
   if (role === 'taluk')
-    return s => s.taluk === user.taluk && s.status !== 'submitted';
+    return s => s.taluk === user.taluk;
   if (role === 'district' || role === 'district_president' || role === 'district_tech')
     return s => s.district === district;
   if (role === 'division' || role === 'division_tech')

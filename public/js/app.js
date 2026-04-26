@@ -350,6 +350,17 @@ async function loadDashboard() {
       </div>` : ''}
     `;
 
+    if (currentUser.role === 'taluk') {
+      const [submitted, inReview] = await Promise.all([
+        apiFetch('/surveys?status=submitted&limit=5'),
+        apiFetch('/surveys?status=taluk_review&limit=5')
+      ]);
+      const queue = [...(submitted?.surveys || []), ...(inReview?.surveys || [])].slice(0, 5);
+      if (queue.length) {
+        el.innerHTML += `<div class="card mb-6"><div class="card-header"><div><div class="card-title">Taluk Review Queue</div><div class="card-sub">New submissions and surveys awaiting taluk decision</div></div><button class="btn btn-primary btn-sm" onclick="navigate('surveys')">Review All</button></div>${buildSurveyTable(queue, true)}</div>`;
+      }
+    }
+
     const recent = await apiFetch('/surveys?limit=5');
     if (recent?.surveys.length) {
       el.innerHTML += `<div class="card"><div class="card-header"><div><div class="card-title">Recent Surveys</div></div><button class="btn btn-secondary btn-sm" onclick="navigate('surveys')">View All</button></div>${buildSurveyTable(recent.surveys, true)}</div>`;
