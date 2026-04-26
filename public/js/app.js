@@ -153,18 +153,19 @@ async function initApp() {
   const token = getToken();
   if (!token) { showPage('login-page'); return; }
   try {
-    if (!currentUser) {
-      const saved = localStorage.getItem('st_user');
-      currentUser = saved ? JSON.parse(saved) : await apiFetch('/auth/me');
-    }
+    const freshUser = await apiFetch('/auth/me');
+    if (freshUser) currentUser = freshUser;
     if (!currentUser) { logout(); return; }
+    localStorage.setItem('st_user', JSON.stringify(currentUser));
     showPage('app-page');
     document.body.className = 'role-' + currentUser.role.replace(/_/g,'-');
     buildSidebar();
     buildTopbar();
     loadNotifications();
     navigate('dashboard');
-  } catch { logout(); }
+  } catch {
+    logout();
+  }
 }
 
 function showPage(id) {
